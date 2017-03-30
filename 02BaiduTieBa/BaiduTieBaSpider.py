@@ -39,7 +39,7 @@ class BaiduTieBaSpider:
             page = response.read().decode('UTF-8')
             if len(page) == 0:
                 print(u"获取百度贴吧页面源文件失败")
-                return None
+                exit(1)
             return page
         except urllib2.URLError, e:
             if hasattr(e, 'reason'):
