@@ -120,7 +120,7 @@ for m in range(1691, 2000):  # 26 ,1000
                 try:
                     conn = pymysql.connect(host='localhost', user='root', passwd='', charset='utf8')
                     cur = conn.cursor()
-                    # cur.execute('create database if not exists python')
+                    cur.execute('create database if not exists bilibili')
                     conn.select_db('bilibili')
                     cur.execute(
                         'INSERT INTO bilibili_user_info VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',

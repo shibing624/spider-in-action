@@ -182,10 +182,11 @@ pool = ThreadPool(4)
 try:
     results = pool.map(spider, urls)
 except Exception, e:
-    # print('ConnectionError'
     print(e)
     time.sleep(300)
     results = pool.map(spider, urls)
 
 pool.close()
 pool.join()
+
+
