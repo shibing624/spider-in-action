@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-@description: 
+@description: 知乎爬虫模拟登陆
 @author:XuMing
 """
 from __future__ import print_function  # 兼容python3的print写法

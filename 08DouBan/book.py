@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-@description: 
+@description: 豆瓣图书爬虫，输出到excel中
 @author:XuMing
 """
 from __future__ import print_function  # 兼容python3的print写法
@@ -20,8 +20,7 @@ sys.setdefaultencoding('utf8')
 
 # Some User Agents
 hds = [{'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6'}, \
-       {
-           'User-Agent': 'Mozilla/5.0 (Windows NT 6.2) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.12 Safari/535.11'}, \
+       {'User-Agent': 'Mozilla/5.0 (Windows NT 6.2) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.12 Safari/535.11'}, \
        {'User-Agent': 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)'}]
 
 
@@ -30,11 +29,11 @@ def book_spider(book_tag):
     book_list = []
     try_times = 0
 
-    while (1):
+    while 1:
         # url='http://www.douban.com/tag/%E5%B0%8F%E8%AF%B4/book?start=0' # For Test
         url = 'http://www.douban.com/tag/' + urllib.quote(book_tag.encode('utf-8')) + '/book?start='\
               + str(page_num * 15)
-        time.sleep(np.random.rand() * 5)
+        # time.sleep(np.random.rand() * 5)
 
         # Last Version
         try:
@@ -53,7 +52,7 @@ def book_spider(book_tag):
         list_soup = soup.find('div', {'class': 'mod book-list'})
 
         try_times += 1;
-        if list_soup == None and try_times < 200:
+        if list_soup == None and try_times < 5:
             continue
         elif list_soup == None or len(list_soup) <= 1:
             break  # Break when no informatoin got after 200 times requesting
@@ -113,7 +112,7 @@ def do_spider(book_tag_lists):
 
 
 def print_book_lists_excel(book_lists, book_tag_lists):
-    wb = Workbook(optimized_write=True)
+    wb = Workbook()
     ws = []
     for i in range(len(book_tag_lists)):
         ws.append(wb.create_sheet(title=book_tag_lists[i].decode()))  # utf8->unicode
@@ -138,9 +137,9 @@ if __name__ == '__main__':
     # book_tag_lists = ['数学']
     # book_tag_lists = ['摄影','设计','音乐','旅行','教育','成长','情感','育儿','健康','养生']
     # book_tag_lists = ['商业','理财','管理']
-    # book_tag_lists = ['名著']
+    book_tag_lists = ['名著']
     # book_tag_lists = ['科普','经典','生活','心灵','文学']
     # book_tag_lists = ['科幻','思维','金融']
-    book_tag_lists = ['个人管理', '时间管理', '投资', '文化', '宗教']
+    # book_tag_lists = ['个人管理', '时间管理', '投资', '文化', '宗教']
     book_lists = do_spider(book_tag_lists)
     print_book_lists_excel(book_lists, book_tag_lists)

@@ -4,7 +4,7 @@
 @author:XuMing
 """
 from __future__ import print_function  # 兼容python3的print写法
-from __future__ import unicode_literals  # 兼容python3的编码处理
+# from __future__ import unicode_literals  # 兼容python3的编码处理
 from lxml import etree
 from multiprocessing.dummy import Pool as ThreadPool
 import requests
@@ -23,7 +23,7 @@ head = {
 }
 
 time1 = time.time()
-for i in range(17501, 100000):
+for i in range(5310819, 7310820):
     url = 'http://bilibili.com/video/av' + str(i)
     urls.append(url)
 
@@ -165,9 +165,8 @@ def spider(url):
                             cur = conn.cursor()
                             conn.select_db('bilibili')
                             cur.execute('INSERT INTO video VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
-                                                [str(av), str(av), cid, title, tminfo, time, click, danmu, coins, favourites, duration,
-                                                 mid, name, article, fans, tag1, tag2, tag3, str(common), honor_click, honor_coins, honor_favourites])
-
+                                                [str(av), str(av), str(cid), title.encode('utf-8'), str(tminfo.encode('utf-8')), time.encode('utf-8'), click.encode('utf-8'), danmu, coins, favourites, duration.encode('utf-8'),
+                                                 mid.encode('utf-8'), name.encode('utf-8'), article.encode('utf-8'), fans.encode('utf-8'), tag1.encode('utf-8'), tag2.encode('utf-8'), tag3.encode('utf-8'), str(common), honor_click, honor_coins, honor_favourites])
                             print("Succeed: av" + str(av))
                         except MySQLdb.Error, e:
                             print("Mysql Error %d: %s" % (e.args[0], e.args[1]))
@@ -179,7 +178,7 @@ def spider(url):
             print("Error_404: " + url)
 
 
-pool = ThreadPool(10)
+pool = ThreadPool(4)
 try:
     results = pool.map(spider, urls)
 except Exception, e:
