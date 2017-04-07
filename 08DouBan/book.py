@@ -7,7 +7,6 @@ from __future__ import print_function  # 兼容python3的print写法
 from __future__ import unicode_literals  # 兼容python3的编码处理
 
 import sys
-import time
 import urllib
 import urllib2
 
@@ -20,7 +19,8 @@ sys.setdefaultencoding('utf8')
 
 # Some User Agents
 hds = [{'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6'}, \
-       {'User-Agent': 'Mozilla/5.0 (Windows NT 6.2) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.12 Safari/535.11'}, \
+       {
+           'User-Agent': 'Mozilla/5.0 (Windows NT 6.2) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.12 Safari/535.11'}, \
        {'User-Agent': 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)'}]
 
 
@@ -31,7 +31,7 @@ def book_spider(book_tag):
 
     while 1:
         # url='http://www.douban.com/tag/%E5%B0%8F%E8%AF%B4/book?start=0' # For Test
-        url = 'http://www.douban.com/tag/' + urllib.quote(book_tag.encode('utf-8')) + '/book?start='\
+        url = 'http://www.douban.com/tag/' + urllib.quote(book_tag.encode('utf-8')) + '/book?start=' \
               + str(page_num * 15)
         # time.sleep(np.random.rand() * 5)
 
