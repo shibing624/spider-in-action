@@ -35,6 +35,7 @@ def normal_attr(name_in_json=None):
     :param str|unicode name_in_json: 需要取的属性在 JSON 中的名字。可空，默认值为
       使用此装饰器的方法名。
     """
+
     def wrappers_wrapper(func):
 
         @functools.wraps(func)

@@ -6,6 +6,7 @@
 @description:Exception
 """
 
+from json import JSONDecodeError
 
 class AppException(Exception):
     pass
