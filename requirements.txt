@@ -1,3 +1,5 @@
 rsa
 bs4
 pymysql
+pymongo
+openpyxl
