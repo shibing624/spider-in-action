@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 # Author: LiangJun, XuMing <xuming624@qq.com>
 # Brief: 
-import time
 
 import re
 from urllib import parse
 
 import requests
 from bs4 import BeautifulSoup
+from multiprocessing import Lock, Pool
+import time
 
 
 class crawler:
@@ -16,7 +17,7 @@ class crawler:
     urls = []
     o_urls = []
     html = ''
-    total_pages = 5
+    total_pages = 2
     current_page = 0
     next_page_url = ''
     timeout = 60  # 默认超时时间为60秒
@@ -77,24 +78,13 @@ class crawler:
 
     def get_div_style(self):
         soup = BeautifulSoup(self.html, 'lxml')
-        count = 0
         mc_set = []
         for i in range(1, 10):
             for j in range(1, 6):
                 item_id = str(i) + '00' + str(j)
                 item = soup.find('div', id=item_id)
-                if item != None:
-                    count += 1
-                    mc_items = ""
-                    mc_items += item.a.get("data-landurl")
-                    divs = item.find_all('div', recursive=False)
-                    for div in divs:
-                        if div.a != None:
-                            text = div.a.get_text()
-                            if text != "":
-                                mc_items = mc_items + "\t" + text
-                    mc_set.append(mc_items)
-                    print(item.h3.get_text())
+                if item and item.h3.get_text():
+                    mc_set.append(item.h3.get_text())
         return mc_set
 
     def get_urls(self):
@@ -136,35 +126,54 @@ class crawler:
             print(url)
 
     def run(self):
-        count = 0
-        mc_set = []
+        h3_list = []
         while (not self.is_finish()):
-            c.get_html()
-            mc_set.extend(c.get_div_style())
-            c.get_urls()
-            c.transformation()
-            # c.print_urls()
-            c.switch_url()
-        return mc_set
+            self.get_html()
+            h3_list.extend(self.get_div_style())
+            self.get_urls()
+            self.transformation()
+            # self.print_urls()
+            self.switch_url()
+        return h3_list
+
+
+def crawler_brand(brand):
+    h3_list = crawler(brand.encode("utf-8")).run()
+    print(brand + "\t" + str(len(h3_list)))
+    return h3_list
+
+
+def save_data(data, save_path):
+    with open(save_path, 'w+', encoding='utf-8') as f:
+        for d in data:
+            f.write(d + "\n")
 
 
 if __name__ == '__main__':
+    # params
+    input_file_path = "search_words.txt"
+    save_path = "search_words_thread_result.txt"
     start_time = time.time()
-    brand_set = []
-    with open("./search_words.txt", 'r', encoding='utf-8') as f:
+    # thread pool, default processes = cpu nums
+    pool = Pool()
+    brand_list = []
+    with open(input_file_path, 'r', encoding='utf-8') as f:
         for line in f:
             terms = line.strip().split("\t")
-            brand_set.append(terms[0])
+            brand_list.append(terms[0])
 
-    with open("./result.txt", 'w+', encoding='utf-8') as f:
-        count = 0
-        for brand in brand_set[count:]:
-            count += 1
-            print("查询第%d个词：%s" % (count, brand))
-
-            c = crawler(brand.encode("utf-8"))
-            mc_set = c.run()
-            print(brand + "\t" + str(len(mc_set)))
-            for mc in mc_set:
-                f.write(brand + "\t" + mc + "\n")
-    print("done.[spend_time:", time.time() - start_time, "]") # [spend_time: 24.51580810546875 ]
+    # start from index
+    index = 0
+    for brand in brand_list[index:]:
+        index += 1
+        print("查询第%d个词：%s" % (index, brand))
+        # 非阻塞式
+        h3_list = pool.apply_async(crawler_brand, (brand,))
+        # save data
+        with open(save_path, 'a+', encoding='utf-8') as f:
+            for d in h3_list.get():
+                f.write(brand + "\t" + d + "\n")
+    print("Start processes")
+    pool.close()
+    pool.join()
+    print("Subprocess done.[spend_time:", time.time() - start_time, "]")  # [spend_time: 9.639744997024536 ]
