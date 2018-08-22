@@ -41,7 +41,7 @@ class BaiduTieBaSpider:
                 print(u"获取百度贴吧页面源文件失败")
                 exit(1)
             return page
-        except urllib2.URLError, e:
+        except urllib2.URLError as e:
             if hasattr(e, 'reason'):
                 print(u"连接百度贴吧失败,错误原因", e.reason)
                 return None

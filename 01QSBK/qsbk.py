@@ -36,11 +36,9 @@ class QSBKSpider:
             # 将页面转化为UTF-8编码
             page_code = response.read().decode('utf-8')
             return page_code
-
-        except urllib2.URLError, e:
+        except urllib2.URLError as e:
             if hasattr(e, "reason"):
                 print(u"连接糗事百科失败,错误原因", e.reason)
-                return None
 
     # 传入某一页代码，返回本页不带图片的段子列表
     def get_page_items(self, page_index):

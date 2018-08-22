@@ -3,3 +3,5 @@ bs4
 pymysql
 pymongo
 openpyxl
+pandas
+lxml

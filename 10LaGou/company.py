@@ -9,7 +9,7 @@ from Queue import Queue
 import pymysql.cursors
 from lxml import etree
 
-conn = pymysql.connect(host='localhost', user='root', passwd='', charset='utf8')
+conn = pymysql.connect(host='localhost', user='root', passwd='rootroot', charset='utf8')
 cur = conn.cursor()
 cur.execute('create database if not exists lagou')
 conn.select_db('lagou')

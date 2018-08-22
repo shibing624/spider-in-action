@@ -53,7 +53,7 @@ def cosplay(member_id, page=1, index=0):
 
 
 if __name__ == '__main__':
-    member_id = raw_input("请输入coser ID，例如：53056:") // 51079, 53051
+    member_id = raw_input("请输入coser ID，例如：53056:")  # 51079, 53051
     if len(member_id) < 2:
         exit(1)
     cosplay(member_id)
