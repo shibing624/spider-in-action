@@ -131,10 +131,12 @@ def save_images(atlas_url):
 # 获取某一图片类型的所有页面链接，可以使用循环遍历字典 girls_images_type，获取所有的图片类型的所有页面链接，
 # 那样运行时间太长，这里为了演示，只取其中一个图片类型
 # 性感美女 和 清纯美眉 是最养眼的，不用谢~~
-pages_url = pages_url('qingchun','1')
+for i,j in girls_images_type.items():
+    pages_urls = pages_url(i,j)
+    print(pages_urls)
+    # 获取页面的所有图集链接
+    atlas_url = atlas(pages_urls)
 
-# 获取页面的所有图集链接
-atlas_url = atlas(pages_url)
-
-# 下载图集的图片
-save_images(atlas_url)
+    # 下载图集的图片
+    save_images(atlas_url)
+print("程序于 {} 结束".format(time.ctime()))
