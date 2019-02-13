@@ -2,7 +2,8 @@
 # coding=utf-8
 # read data from csv, write to database
 # database includes: csv
-
+import sys
+sys.path.append("../")
 import os
 
 from beike.config import SPIDER_NAME
