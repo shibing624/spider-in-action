@@ -3,13 +3,14 @@
 # read data from csv, write to database
 # database includes: csv
 import sys
+
 sys.path.append("../")
 import os
 
 from beike.config import SPIDER_NAME
-from beike.place.city import cities, get_city, get_chinese_city
+from beike.place.city import cities, get_chinese_city
 from beike.util.date import get_date_string
-from beike.util.path import DATA_PATH,create_site_path
+from beike.util.path import DATA_PATH
 
 
 def create_prompt_text():

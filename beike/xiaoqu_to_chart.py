@@ -4,6 +4,7 @@
 # 2. 启动一个新的http服务器
 # 3. 用浏览器打开生成的数据html文件
 import sys
+
 sys.path.append("../")
 import os
 import time
@@ -19,7 +20,7 @@ from beike.util.path import DATA_PATH
 if __name__ == '__main__':
     try:
         os.system("ps aux | grep python | grep http.server | grep -v grep | awk '{print $2}' | xargs kill")
-        os.system("python3 -m http.server 8080 & > /dev/null 2>&1 ")
+        os.system("python3.6 -m http.server 8080 & > /dev/null 2>&1 ")
     except Exception as e:
         print(e)
 

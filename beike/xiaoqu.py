@@ -5,6 +5,7 @@
 # 20180221,浦东,川沙,恒纬家苑,32176元/m2,3套在售二手房
 
 import sys
+
 sys.path.append("../")
 from beike.core.xiaoqu_spider import XiaoQuBaseSpider
 from beike.config import SPIDER_NAME

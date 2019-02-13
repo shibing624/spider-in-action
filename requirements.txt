@@ -3,7 +3,6 @@ bs4
 pymongo
 openpyxl
 pandas
-lxml
 pyecharts
 requests
 threadpool
