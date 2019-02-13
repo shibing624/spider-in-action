@@ -5,10 +5,13 @@
 """
 from __future__ import print_function
 from __future__ import unicode_literals
-import requests
-from bs4 import BeautifulSoup
+
 import os
 import time
+
+import requests
+from bs4 import BeautifulSoup
+
 
 # http://img1.mm131.me/pic/4272/19.jpg
 
@@ -132,7 +135,7 @@ if __name__ == "__main__":
 
     for i, j in girls_images_type.items():
         pages_urls = pages_url(i, j)
-        print('pages_urls:',pages_urls)
+        print('pages_urls:', pages_urls)
         # 获取页面的所有图集链接
         atlas_urls = atlas(pages_urls)
         print('atlas_urls:', atlas_urls)
