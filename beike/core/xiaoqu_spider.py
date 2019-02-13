@@ -14,7 +14,7 @@ from ..config import SPIDER_NAME, thread_pool_size, log_path
 from ..item.xiaoqu import XiaoQu
 from ..place.area import area_dict
 from ..place.area import chinese_area_dict, get_areas
-from ..place.city import get_city, get_chinese_city
+from ..place.city import get_city, get_chinese_city, cities
 from ..place.district import get_chinese_district, get_districts
 from ..request.headers import create_headers
 from ..util.io_utils import get_logger
@@ -102,48 +102,48 @@ class XiaoQuBaseSpider(BaseSpider):
         return xiaoqu_list
 
     def start(self):
-        city = get_city()
-        self.today_path = create_date_path("{0}/xiaoqu".format(SPIDER_NAME), city, self.date_string)
-        t1 = time.time()  # 开始计时
+        for city in cities:
+            self.today_path = create_date_path("{0}/xiaoqu".format(SPIDER_NAME), city, self.date_string)
+            t1 = time.time()  # 开始计时
 
-        # 获得城市有多少区列表, district: 区县
-        districts = get_districts(city)
-        print('City: {0}'.format(city))
-        print('Districts: {0}'.format(districts))
+            # 获得城市有多少区列表, district: 区县
+            districts = get_districts(city)
+            print('City: {0}'.format(city))
+            print('Districts: {0}'.format(districts))
 
-        # 获得每个区的板块, area: 板块
-        areas = list()
-        for district in districts:
-            areas_of_district = get_areas(city, district)
-            print('{0}: Area list:  {1}'.format(district, areas_of_district))
-            # 用list的extend方法,L1.extend(L2)，该方法将参数L2的全部元素添加到L1的尾部
-            areas.extend(areas_of_district)
-            # 使用一个字典来存储区县和板块的对应关系, 例如{'beicai': 'pudongxinqu', }
-            for area in areas_of_district:
-                area_dict[area] = district
-        print("Area:", areas)
-        print("District and areas:", area_dict)
+            # 获得每个区的板块, area: 板块
+            areas = list()
+            for district in districts:
+                areas_of_district = get_areas(city, district)
+                print('{0}: Area list:  {1}'.format(district, areas_of_district))
+                # 用list的extend方法,L1.extend(L2)，该方法将参数L2的全部元素添加到L1的尾部
+                areas.extend(areas_of_district)
+                # 使用一个字典来存储区县和板块的对应关系, 例如{'beicai': 'pudongxinqu', }
+                for area in areas_of_district:
+                    area_dict[area] = district
+            print("Area:", areas)
+            print("District and areas:", area_dict)
 
-        # 准备线程池用到的参数
-        nones = [None for i in range(len(areas))]
-        city_list = [city for i in range(len(areas))]
-        args = zip(zip(city_list, areas), nones)
-        # areas = areas[0: 1]
+            # 准备线程池用到的参数
+            nones = [None for i in range(len(areas))]
+            city_list = [city for i in range(len(areas))]
+            args = zip(zip(city_list, areas), nones)
+            # areas = areas[0: 1]
 
-        # 针对每个板块写一个文件,启动一个线程来操作
-        pool_size = thread_pool_size
-        pool = threadpool.ThreadPool(pool_size)
-        my_requests = threadpool.makeRequests(self.collect_area_xiaoqu_data, args)
-        [pool.putRequest(req) for req in my_requests]
-        pool.wait()
-        pool.dismissWorkers(pool_size, do_join=True)  # 完成后退出
+            # 针对每个板块写一个文件,启动一个线程来操作
+            pool_size = thread_pool_size
+            pool = threadpool.ThreadPool(pool_size)
+            my_requests = threadpool.makeRequests(self.collect_area_xiaoqu_data, args)
+            [pool.putRequest(req) for req in my_requests]
+            pool.wait()
+            pool.dismissWorkers(pool_size, do_join=True)  # 完成后退出
 
-        # 计时结束，统计结果
-        t2 = time.time()
-        print("Total crawl {0} areas.".format(len(areas)))
-        print("Total cost {0} second to crawl {1} data items.".format(t2 - t1, self.total_num))
+            # 计时结束，统计结果
+            t2 = time.time()
+            print("Total crawl {0} areas.".format(len(areas)))
+            print("Total cost {0} second to crawl {1} data items.".format(t2 - t1, self.total_num))
 
-        os.system("cat {0}/*.csv > {0}/../{1}.csv".format(self.today_path, city))
+            # os.system("cat {0}/*.csv > {0}/../{1}.csv".format(self.today_path, city))
 
 
 if __name__ == "__main__":

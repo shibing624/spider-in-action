@@ -1,7 +1,15 @@
 rsa
 bs4
-pymysql
 pymongo
 openpyxl
 pandas
 lxml
+pyecharts
+requests
+threadpool
+pymysql
+records
+xlsxwriter
+numpy
+pyecharts-snapshot
+webbrowser

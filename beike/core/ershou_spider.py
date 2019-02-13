@@ -153,7 +153,7 @@ class ErShouSpider(BaseSpider):
         t2 = time.time()
         print("Total crawl {0} areas.".format(len(areas)))
         print("Total cost {0} second to crawl {1} data items.".format(t2 - t1, self.total_num))
-        os.system("cat {0}/*.csv > {0}/../{1}.csv".format(self.today_path, city))
+        # os.system("cat {0}/*.csv > {0}/../{1}.csv".format(self.today_path, city))
 
 
 if __name__ == '__main__':
