@@ -18,11 +18,11 @@ from beike.place.city import cities
 from beike.util.path import DATA_PATH
 
 if __name__ == '__main__':
-    try:
-        os.system("ps aux | grep python | grep http.server | grep -v grep | awk '{print $2}' | xargs kill")
-        os.system("python3.6 -m http.server 8080 & > /dev/null 2>&1 ")
-    except Exception as e:
-        print(e)
+    # try:
+    #     os.system("ps aux | grep python | grep http.server | grep -v grep | awk '{print $2}' | xargs kill")
+    #     os.system("python3.6 -m http.server 8080 & > /dev/null 2>&1 ")
+    # except Exception as e:
+    #     print(e)
 
     xiaoqu_city_path = "{0}/{1}/xiaoqu".format(DATA_PATH, SPIDER_NAME)
     for ct in cities:
@@ -72,8 +72,6 @@ if __name__ == '__main__':
         grid.add(bar, grid_bottom="60%")
         grid.add(line, grid_top="60%")
         grid.render(path="{0}.html".format(ct))
-        url = "http://localhost:8080/{0}.html".format(ct)
-        web.open(url, new=0, autoraise=True)
-        print(url)
-        # 确保页面打开
-        time.sleep(3)
+        # url = "http://localhost:8080/{0}.html".format(ct)
+        # web.open(url, new=0, autoraise=True)
+        # print(url)
