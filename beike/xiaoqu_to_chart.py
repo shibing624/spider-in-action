@@ -26,20 +26,20 @@ if __name__ == '__main__':
 
     xiaoqu_city_path = "{0}/{1}/xiaoqu".format(DATA_PATH, SPIDER_NAME)
     for ct in cities:
+        # 注意，已经将分割符号转换成分号，因为有的小区名中有逗号
+        df = pd.read_csv(xiaoqu_city_path + "/{0}.csv".format(ct), encoding="utf-8", sep=";")
+
+        # 打印总行数
+        print("row number is {0}".format(len(df.index)))
+
+        # 过滤房价为0的无效数据
+        df = df[df.price > 0]
+        if not df:
+            continue
         try:
-            # 注意，已经将分割符号转换成分号，因为有的小区名中有逗号
-            df = pd.read_csv(xiaoqu_city_path + "/{0}.csv".format(ct), encoding="utf-8", sep=";")
-
-            # 打印总行数
-            print("row number is {0}".format(len(df.index)))
-
-            # 过滤房价为0的无效数据
-            df = df[df.price > 0]
-            if not df:
-                continue
             print("row number is {0}".format(len(df.index)))
         except Exception as e:
-            print("error with read df", e)
+            print("error with df.index.", e)
             continue
 
 
