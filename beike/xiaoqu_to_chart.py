@@ -81,11 +81,12 @@ if __name__ == '__main__':
             # 区县均价排名-地图
             ####################################################
             district_map = Map("{0}区县均价分布".format(city), width=1200, height=600)
+            price_min, price_max = min(prices.tolist()), max(prices.tolist())
             district_map.add("", districts, prices,
                              maptype=city,
                              is_visualmap=True,
                              visual_text_color="#000",
-                             visual_range=[5000, 25000],
+                             visual_range=[price_min, price_max],
                              is_label_show=True,
                              is_more_utils=True)
             district_map.render(path="html/{0}_district_map.html".format(ct))
