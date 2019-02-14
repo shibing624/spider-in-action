@@ -28,14 +28,10 @@ if __name__ == '__main__':
             df = pd.read_csv(xiaoqu_city_path + "/{0}.csv".format(ct), encoding="utf-8", sep=";")
 
             # 打印总行数
-            print("row number is {0}".format(len(df.index)))
-
+            print("before: row number is {0}".format(len(df)))
             # 过滤房价为0的无效数据
             df = df[df.price > 0]
-            if not len(df):
-                continue
-
-            print("row number is {0}".format(len(df.index)))
+            print("trim zero: row number is {0}".format(len(df)))
 
             ####################################################
             # 最贵的小区排名
