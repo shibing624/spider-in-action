@@ -51,6 +51,7 @@ if __name__ == '__main__':
             bar.add("小区均价排名", xqs, prices, is_label_show=True, is_more_utils=True,
                     xaxis_interval=0,
                     xaxis_rotate=30,
+                    mark_line=["average"], mark_point=["max", "min"],
                     is_datazoom_show=True,
                     datazoom_type="both",
                     datazoom_range=[10, 10.3],
@@ -69,11 +70,12 @@ if __name__ == '__main__':
             district_bar.add("区县均价排名", districts, prices, is_stack=False,
                              xaxis_interval=0,
                              xaxis_rotate=30,
+                             mark_line=["average"], mark_point=["max", "min"],
                              is_label_show=True, is_more_utils=True, legend_top="50%")
             grid = Grid(height=720)
             grid.add(bar, grid_bottom="60%")
             grid.add(district_bar, grid_top="60%")
-            grid.render(path="{0}.html".format(ct))
+            grid.render(path="html/{0}.html".format(ct))
             # url = "http://localhost:8080/{0}.html".format(ct)
             # web.open(url, new=0, autoraise=True)
             # print(url)
