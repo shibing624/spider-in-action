@@ -40,14 +40,13 @@ if __name__ == '__main__':
             num = -1
             print(df.head(10))
 
-            city = df["city_ch"][0]
+            city = cities[ct]
             xqs = df["xiaoqu"][0:num]
             prices = df["price"][0:num]
             bar = Bar("{0}小区均价排名".format(city))
             bar.add("小区均价排名", xqs, prices, is_label_show=True, is_more_utils=True,
                     xaxis_interval=0,
                     xaxis_rotate=30,
-                    mark_line=["average"], mark_point=["max", "min"],
                     is_datazoom_show=True,
                     datazoom_type="both",
                     datazoom_range=[10, 10.3],
@@ -66,7 +65,7 @@ if __name__ == '__main__':
             district_bar.add("区县均价排名", districts, prices, is_stack=False,
                              xaxis_interval=0,
                              xaxis_rotate=30,
-                             mark_line=["average"], mark_point=["max", "min"],
+                             mark_line=["average"],
                              is_label_show=True, is_more_utils=True, legend_top="50%")
             grid = Grid(height=720)
             grid.add(bar, grid_bottom="60%")
