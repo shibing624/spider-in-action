@@ -39,6 +39,7 @@ if __name__ == '__main__':
 
     # city = get_city()
     for city in cities:
+        # city = 'wh'
         xiaoqu_city_path = "{0}/{1}/xiaoqu".format(DATA_PATH, SPIDER_NAME)
         csv_file = open(xiaoqu_city_path + "/{0}.csv".format(city), "w", encoding='utf-8')
         line = "{0};{1};{2};{3};{4};{5};{6}\n".format('city_ch', 'date', 'district', 'area', 'xiaoqu', 'price', 'sale')
