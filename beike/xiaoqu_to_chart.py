@@ -80,5 +80,5 @@ if __name__ == '__main__':
             # web.open(url, new=0, autoraise=True)
             # print(url)
         except Exception as e:
-            print("error with df: " + e)
+            print("error with df: ", e)
             continue

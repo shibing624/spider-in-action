@@ -4,11 +4,10 @@ pymongo
 openpyxl
 pandas
 pyecharts
+pyecharts-snapshot
 requests
 threadpool
 pymysql
 records
 xlsxwriter
 numpy
-pyecharts-snapshot
-webbrowser
