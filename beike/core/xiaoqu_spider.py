@@ -4,7 +4,7 @@
 
 import re
 import time
-import os
+
 import requests
 import threadpool
 from bs4 import BeautifulSoup
@@ -14,7 +14,7 @@ from ..config import SPIDER_NAME, thread_pool_size, log_path
 from ..item.xiaoqu import XiaoQu
 from ..place.area import area_dict
 from ..place.area import chinese_area_dict, get_areas
-from ..place.city import get_city, get_chinese_city, cities
+from ..place.city import cities
 from ..place.district import get_chinese_district, get_districts
 from ..request.headers import create_headers
 from ..util.io_utils import get_logger

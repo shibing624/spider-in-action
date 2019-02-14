@@ -12,6 +12,7 @@ from .base_spider import BaseSpider
 from ..config import SPIDER_NAME, log_path
 from ..item.loupan import LouPan
 from ..place.city import get_city
+from ..place.city import cities
 from ..request.headers import create_headers
 from ..util.io_utils import get_logger
 from ..util.path import create_date_path
@@ -104,16 +105,17 @@ class LouPanBaseSpider(BaseSpider):
         return loupan_list
 
     def start(self):
-        city = get_city()
-        print('Today date is: %s' % self.date_string)
-        self.today_path = create_date_path("{0}/loupan".format(SPIDER_NAME), city, self.date_string)
+        for city in cities:
+            # city = get_city()
+            print('Today date is: %s' % self.date_string)
+            self.today_path = create_date_path("{0}/loupan".format(SPIDER_NAME), city, self.date_string)
 
-        t1 = time.time()  # 开始计时
-        self.collect_city_loupan_data(city)
-        t2 = time.time()  # 计时结束，统计结果
+            t1 = time.time()  # 开始计时
+            self.collect_city_loupan_data(city)
+            t2 = time.time()  # 计时结束，统计结果
 
-        print("Total crawl {0} loupan.".format(self.total_num))
-        print("Total cost {0} second ".format(t2 - t1))
+            print("Total crawl {0} loupan.".format(self.total_num))
+            print("Total cost {0} second ".format(t2 - t1))
 
 
 if __name__ == '__main__':
