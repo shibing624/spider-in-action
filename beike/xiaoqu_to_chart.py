@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
         # 过滤房价为0的无效数据
         df = df[df.price > 0]
-        if not df:
+        if not len(df):
             continue
         try:
             print("row number is {0}".format(len(df.index)))
