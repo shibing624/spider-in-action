@@ -12,10 +12,18 @@ from pyecharts import Bar, Map, Page, Geo
 from pyecharts.conf import PyEchartsConfig
 from pyecharts.engine import EchartsEnvironment
 from pyecharts.utils import write_utf8_html_file
+from pyecharts_javascripthon.dom import alert
 
+import pyecharts.echarts.events as events
 from beike.config import SPIDER_NAME
 from beike.place.city import cities
 from beike.util.path import DATA_PATH
+
+
+def on_click(params):
+    alert(params.name)
+    print(params.name)
+
 
 if __name__ == '__main__':
     # try:
@@ -64,7 +72,8 @@ if __name__ == '__main__':
                               is_label_show=True,
                               is_more_utils=True,
                               label_formatter="{b}")
-    path = "html/china_house_price.html"
+    china_geo_house_price.on(events.MOUSE_CLICK, on_click)
+    path = "html/index.html"
     china_geo_house_price.render(path)
     print("save to ", path)
 

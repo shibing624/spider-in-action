@@ -1,0 +1,32 @@
+<title>三色云-全国房价一张图</title>
+<link rel="shortcut icon" href="./favicon.ico"/>
+
+var city_samples = new Array();
+city_samples["北京"] = "bj";
+city_samples["成都"] = "cd";
+city_samples["重庆"] = "cq";
+city_samples["长沙"] = "cs";
+city_samples["东莞"] = "bj";
+city_samples["大连"] = "dl";
+city_samples["佛山"] = "fs";
+city_samples["广州"] = "gz";
+city_samples["杭州"] = "hz";
+city_samples["合肥"] = "hf";
+city_samples["济南"] = "jn";
+city_samples["南京"] = "nj";
+city_samples["青岛"] = "qd";
+city_samples["上海"] = "sh";
+city_samples["深圳"] = "sz";
+city_samples["苏州"] = "su";
+city_samples["沈阳"] = "sy";
+city_samples["天津"] = "tj";
+city_samples["武汉"] = "wh";
+city_samples["厦门"] = "xm";
+city_samples["烟台"] = "yt";
+
+
+function on_click(params) {
+    url = city_samples[params.name] + ".html"
+    window.open(url)
+    console.log(params.name);
+}
