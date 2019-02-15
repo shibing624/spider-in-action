@@ -26,9 +26,9 @@ city_samples["烟台"] = "yt";
 
 
 function on_click(params) {
-    url = city_samples[params.name] + ".html"
     for(var key in city_samples){
         if(params.name === key){
+            url = city_samples[params.name] + ".html"
             window.open(url)
         }
     }
