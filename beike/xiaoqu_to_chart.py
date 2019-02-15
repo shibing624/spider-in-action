@@ -8,7 +8,10 @@ import sys
 sys.path.append("../")
 
 import pandas as pd
-from pyecharts import Bar, Map, Page
+from pyecharts import Bar, Map, Page, Geo
+from pyecharts.conf import PyEchartsConfig
+from pyecharts.engine import EchartsEnvironment
+from pyecharts.utils import write_utf8_html_file
 
 from beike.config import SPIDER_NAME
 from beike.place.city import cities
@@ -21,6 +24,51 @@ if __name__ == '__main__':
     # except Exception as e:
     #     print(e)
 
+    # 全国房价
+    all_name = "all"
+    xiaoqu_all_path = "{0}/{1}/xiaoqu/{2}.csv".format(DATA_PATH, SPIDER_NAME, all_name)
+    df_all = pd.read_csv(xiaoqu_all_path, encoding="utf-8", sep=";")
+    # 打印总行数
+    print("df_all, before: row number is {0}".format(len(df_all)))
+    # 过滤房价为0的无效数据
+    df_all = df_all[df_all.price > 0]
+    print("df_all, trim zero: row number is {0}".format(len(df_all)))
+
+    # 'city_ch', 'date', 'district', 'area', 'xiaoqu', 'price', 'sale'
+    city_df = df_all.groupby('city_ch').mean()
+    city_df = city_df.round(0)
+    city_df.sort_values("price", ascending=False, inplace=True)
+    print(city_df)
+    city_idx = city_df.index
+    city_list = city_idx.values.tolist()
+    prices = city_df["price"].tolist()
+    price_min, price_max = min(prices), max(prices)
+
+    # pyechart template
+    config = PyEchartsConfig(echarts_template_dir='./template',
+                             jshost='https://cdn.bootcss.com/echarts/3.6.2')
+    env = EchartsEnvironment(pyecharts_config=config)
+    tpl = env.get_template('tpl.html')
+
+    china_geo_house_price = Geo("中国主要城市房价", "data from ke.com",
+                                title_color="#fff",
+                                title_pos="center",
+                                width="100%",
+                                height=720,
+                                background_color="#404a59")
+    china_geo_house_price.add("", city_list, prices,
+                              visual_range=[price_min, price_max],
+                              visual_text_color="#fff",
+                              symbol_size=15,
+                              is_visualmap=True,
+                              is_label_show=True,
+                              is_more_utils=True,
+                              label_formatter="{b}")
+    path = "html/china_house_price.html"
+    china_geo_house_price.render(path)
+    print("save to ", path)
+
+    # 各城市房价
     xiaoqu_city_path = "{0}/{1}/xiaoqu".format(DATA_PATH, SPIDER_NAME)
     for ct in cities:
         try:
@@ -34,6 +82,8 @@ if __name__ == '__main__':
             # 过滤房价为0的无效数据
             df = df[df.price > 0]
             print("trim zero: row number is {0}".format(len(df)))
+            if len(df) == 0:
+                continue
 
             ####################################################
             # 最贵的小区排名
@@ -55,7 +105,10 @@ if __name__ == '__main__':
                            datazoom_type="both",
                            datazoom_range=[10, 10.3],
                            )
-            xiaoqu_bar.render(path="html/{0}_xiaoqu_bar.html".format(ct))
+            tpl_render = tpl.render(bar=xiaoqu_bar)
+            path = "html/{0}_xiaoqu_bar.html".format(ct)
+            write_utf8_html_file(path, tpl_render)
+            print("save to ", path)
 
             ####################################################
             # 区县均价排名
@@ -75,7 +128,10 @@ if __name__ == '__main__':
                              is_label_show=True,
                              is_more_utils=True
                              )
-            district_bar.render(path="html/{0}_district_bar.html".format(ct))
+            tpl_render = tpl.render(bar=district_bar)
+            path = "html/{0}_district_bar.html".format(ct)
+            write_utf8_html_file(path, tpl_render)
+            print("save to ", path)
 
             ####################################################
             # 区县均价排名-地图
@@ -89,12 +145,16 @@ if __name__ == '__main__':
                              visual_range=[price_min, price_max],
                              is_label_show=True,
                              is_more_utils=True)
-            district_map.render(path="html/{0}_district_map.html".format(ct))
+            path = "html/{0}_district_map.html".format(ct)
+            district_map.render(path)
+            print("save to ", path)
 
             page.add(district_map)
             page.add(district_bar)
             page.add(xiaoqu_bar)
-            page.render(path="html/{0}.html".format(ct))
+            path = "html/{0}.html".format(ct)
+            page.render(path)
+            print("save to ", path)
             # break
         except Exception as e:
             print("error with df: ", e)

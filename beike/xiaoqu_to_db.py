@@ -36,6 +36,14 @@ if __name__ == '__main__':
     workbook = None
     csv_file = None
     datas = list()
+    # save all data to one file
+    # 集合文件
+    all_name = "all"
+    csv_all_path = "{0}/{1}/xiaoqu/{2}.csv".format(DATA_PATH, SPIDER_NAME, all_name)
+    f_all = open(csv_all_path, 'w', encoding='utf-8')
+    line = "{0};{1};{2};{3};{4};{5};{6}\n".format('city_ch', 'date', 'district', 'area', 'xiaoqu', 'price', 'sale')
+    f_all.write(line)
+    f_all_count = 0
 
     # city = get_city()
     for city in cities:
@@ -57,7 +65,7 @@ if __name__ == '__main__':
             print("{0} does not exist.".format(csv_dir))
             print("Please run 'python xiaoqu.py' firstly.")
             print("Bye.")
-            exit(0)
+            continue
         else:
             print('OK, start to process ' + get_chinese_city(city))
         for csv in os.listdir(csv_dir):
@@ -97,10 +105,16 @@ if __name__ == '__main__':
                     price = price.replace(r'元/m2', '')
                     price = int(price)
                     sale = int(sale)
-                    print("{0} {1} {2} {3} {4} {5}".format(date, district, area, xiaoqu, price, sale))
                     line = "{0};{1};{2};{3};{4};{5};{6}\n".format(city_ch, date, district, area, xiaoqu, price, sale)
                     csv_file.write(line)
+                    f_all.write(line)
+                    f_all_count += 1
 
         # 写入，并且关闭句柄
         csv_file.close()
         print("Total write {0} items to csv.".format(count))
+    f_all.close()
+    print("ALL: Total write {0} items to csv.".format(f_all_count))
+
+
+
