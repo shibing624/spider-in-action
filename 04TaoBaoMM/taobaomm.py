@@ -8,9 +8,12 @@ from __future__ import unicode_literals  # 兼容python3的编码处理
 
 import os
 import urllib
-import urllib2
+import urllib.request
 
 from bs4 import BeautifulSoup
+
+
+# import urllib2
 
 
 # 抓取淘宝MM图
@@ -23,13 +26,13 @@ class TaoBaoMMSpider:
 
     def get_page(self, index):
         url = self.url + "?page=" + str(index)
-        request = urllib2.Request(url, headers=self.headers)
-        resp = urllib2.urlopen(request)
+        request = urllib.request.Request(url, headers=self.headers)
+        resp = urllib.request.urlopen(request)
         return resp.read()
 
     # 获取索引界面所有MM的信息，list格式
     def get_content(self, index):
-        page = self.get_page(index).decode('gbk')
+        page = self.get_page(index).decode('utf-8')
         contents = []
         soup = BeautifulSoup(page, 'lxml')
         items = soup.find_all('div', class_='list-item')
@@ -50,14 +53,14 @@ class TaoBaoMMSpider:
     # 获取MM个人详情页面
     def get_detail_page(self, info_url):
         # 构建请求的request
-        request = urllib2.Request(info_url, headers=self.headers)
-        resp = urllib2.urlopen(request)
+        request = urllib.request.Request(info_url, headers=self.headers)
+        resp = urllib.request.urlopen(request)
         return resp.read().decode('gbk')
 
     # 获取个人相册地址
     def get_album_url(self, page):
         page = BeautifulSoup(page, 'lxml')
-        menu = page.find('ul', class_='mm-p-menu')
+        menu = page.find('ul', class_='mm-p-men')
         if menu:
             return 'https:' + menu.find('a').get('href')
         return ""
@@ -73,7 +76,7 @@ class TaoBaoMMSpider:
     # 保存多张写真图片
     def save_img(self, images, name):
         num = 1
-        print(name, u'共有', len(images), u'张照片')
+        print(name, '共有', len(images), '张照片')
         if images is None:
             return
         for image_url in images:
@@ -97,12 +100,12 @@ class TaoBaoMMSpider:
         name = item[2]
         file_name = name + '/' + name + '.txt'
         f = open(file_name, "w+")
-        print(u"在保存个人信息：", file_name)
-        f.write((u'名字：' + name + '\n').encode('utf-8'))
-        f.write((u'个人空间地址：' + item[0] + '\n').encode('utf-8'))
-        f.write((u'年龄：' + str(item[3]) + '\n').encode('utf-8'))
-        f.write((u'居住地：' + item[4] + '\n').encode('utf-8'))
-        f.write((u'个人相册地址：' + content + '\n').encode('utf-8'))
+        print('在保存个人信息：', file_name)
+        f.write(('名字：' + name + '\n').encode('utf-8'))
+        f.write(('个人空间地址：' + item[0] + '\n').encode('utf-8'))
+        f.write(('年龄：' + str(item[3]) + '\n').encode('utf-8'))
+        f.write(('居住地：' + item[4] + '\n').encode('utf-8'))
+        f.write(('个人相册地址：' + content + '\n').encode('utf-8'))
         f.close()
 
     # 传入图片地址，文件名，保存单张图片
@@ -111,10 +114,10 @@ class TaoBaoMMSpider:
             return
         try:
             urllib.urlretrieve(url=image_url, filename=file_name)
-            print(u'下完了%s张' % (index + 1))
+            print('下完了%s张' % (index + 1))
             index += 1
         except Exception:
-            print(u'这张图片下载出问题了： %s' % image_url)
+            print('这张图片下载出问题了： %s' % image_url)
 
     # 创建新目录
     def mkdir(self, path):

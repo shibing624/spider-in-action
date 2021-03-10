@@ -13,14 +13,16 @@ import requests
 from bs4 import BeautifulSoup
 
 
-# http://img1.mm131.me/pic/4272/19.jpg
+# https://www.mm131.net/xinggan/5742_2.html
+# https://img1.nthjjz.com/pic/5742/2.jpg
+# https://img1.nthjjz.com/pic/5742/2.jpg
 
 # 创建soup对象
 def creat_soup(url):
-    '''
+    """
     该函数返回一个url的soup对象
     :param url:一个页面的链接
-    '''
+    """
     # 获取网页，得到一个response对象
     response = requests.get(url)
     # 指定自定义编码，让文本按指定的编码进行解码，因为网站的charset = gb2312
@@ -30,11 +32,11 @@ def creat_soup(url):
 
 
 def pages_url(image_type, position):
-    '''
+    """
     该函数用于获取某一个图片类型的全部页面的链接
     :param image_type:美女图片的类型，只有6种，是一个列表
-    '''
-    url = 'http://www.mm131.com/' + image_type
+    """
+    url = 'https://www.mm131.net/' + image_type
     # 调用函数，创建soup对象
     soup = creat_soup(url)
     # 查找当前图片类型的分页链接
@@ -56,11 +58,11 @@ def pages_url(image_type, position):
     return pages_url
 
 
-def atlas(pages_url):
-    '''
+def atlas(pages_url, limit=-1):
+    """
     该函数用于存储某一个页面的所有图集链接
     :param pages_url:页面链接，可以是列表
-    '''
+    """
     # 用于存储每一个图集链接的列表
     atlas_url = []
     for page_url in pages_url:
@@ -74,14 +76,16 @@ def atlas(pages_url):
                 # 将符合条件的链接，即 每一个图集的链接加入到列表中
                 atlas_url.append(information.find('a').get('href'))
     # 函数返回某一个页面的全部图集链接
+    if limit > 0:
+        atlas_url = atlas_url[:200]
     return atlas_url
 
 
 def save_images(atlas_url, match_type):
-    '''
+    """
     该函数用于将某一图集的所有图片保存下来
     :param atlas_url:图集链接，可以是个列表
-    '''
+    """
     # 共有多少个图集
     length = len(atlas_url)
     # 已下载图集
@@ -104,11 +108,11 @@ def save_images(atlas_url, match_type):
         # 创建列表，用于保存每一张图片的链接
         images_url = []
         for number in range(1, images_number + 1):
-            images_url.append('http://img1.mm131.me/pic/' + pic_number + '/' + str(number) + '.jpg')
+            images_url.append('https://img1.nthjjz.com/pic/' + pic_number + '/' + str(number) + '.jpg')
         # 有些网站会有防盗链，原理是检查 HTTP的referer头，如果没有referer，会抓取不了数据
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
-            'referer': "http://www.mm131.com/xinggan/530.html"}
+            'referer': "https://www.mm131.net/xinggan/5742_3.html"}
         # 开始下载提示，等待2秒后开始下载
         print("开始下载图集 {}，剩余图集 {}".format(file_folder, length - count))
         time.sleep(2)
@@ -131,13 +135,14 @@ if __name__ == "__main__":
     print("程序于 {} 开始启动，请等待...".format(time.ctime()))
     # 美女图片类型和对应的页面序列位置，图片类型为键，位置为 值
     # 这个位置用于图集的链接，如list_6_3.html，6即为性感美女的序列位置
-    girls_images_type = {'xinggan': '6', 'qingchun': '1', 'xiaohua': '2', 'chemo': '3', 'qipao': '4', 'mingxing': '5'}
+    # girls_images_type = {'xinggan': '6', 'qingchun': '1', 'xiaohua': '2', 'chemo': '3', 'qipao': '4', 'mingxing': '5'}
+    girls_images_type = {'xinggan': '6'}
 
     for i, j in girls_images_type.items():
         pages_urls = pages_url(i, j)
         print('pages_urls:', pages_urls)
         # 获取页面的所有图集链接
-        atlas_urls = atlas(pages_urls)
+        atlas_urls = atlas(pages_urls, limit=200)
         print('atlas_urls:', atlas_urls)
         # 下载图集的图片
         save_images(atlas_urls, i)
