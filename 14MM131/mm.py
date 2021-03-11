@@ -77,7 +77,7 @@ def atlas(pages_url, limit=-1):
                 atlas_url.append(information.find('a').get('href'))
     # 函数返回某一个页面的全部图集链接
     if limit > 0:
-        atlas_url = atlas_url[:200]
+        atlas_url = atlas_url[:limit]
     return atlas_url
 
 
@@ -142,7 +142,7 @@ if __name__ == "__main__":
         pages_urls = pages_url(i, j)
         print('pages_urls:', pages_urls)
         # 获取页面的所有图集链接
-        atlas_urls = atlas(pages_urls, limit=200)
+        atlas_urls = atlas(pages_urls, limit=10)
         print('atlas_urls:', atlas_urls)
         # 下载图集的图片
         save_images(atlas_urls, i)
